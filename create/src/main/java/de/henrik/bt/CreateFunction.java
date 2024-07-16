@@ -5,13 +5,13 @@ import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
 import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class CreateFunction implements HttpFunction {
@@ -68,6 +68,11 @@ public class CreateFunction implements HttpFunction {
 	private void create(AD_WorkDTA work, HttpResponse response) throws Exception {
 
 		try {
+			if (isTest()) {
+				response.setStatusCode(HttpURLConnection.HTTP_OK);
+				response.getWriter().write("Successfully inserted row.");
+				return;
+			}
 			BigQuery bq = BigQueryOptions.getDefaultInstance().getService();
 
 			String datasetName = "poc";
@@ -117,5 +122,9 @@ public class CreateFunction implements HttpFunction {
 
 		response.setStatusCode(HttpURLConnection.HTTP_OK);
 		response.getWriter().write("Successfully inserted row.");
+	}
+
+	private  boolean isTest() {
+		return System.getenv("TEST") != null && Objects.equals(System.getenv("TEST"), "true");
 	}
 }

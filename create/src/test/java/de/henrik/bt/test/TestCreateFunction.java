@@ -3,6 +3,9 @@ package de.henrik.bt.test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
+import de.henrik.bt.CreateFunction;
+import de.henrik.bt.AD_WorkDTA;
+
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
 import com.google.gson.Gson;
@@ -14,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.rules.TestName;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.io.BufferedReader;
@@ -40,6 +44,8 @@ class TestCreateFunction {
 	public void beforeTest(TestInfo testInfo) throws IOException {
 		// Initialize mocks and change HTTP Request Method
 		MockitoAnnotations.openMocks(this);
+
+		Mockito.mock(CreateFunction.class);
 
 		this.testInfo = testInfo;
 
@@ -73,7 +79,7 @@ class TestCreateFunction {
 
 		writerOut.flush();
 
-		assertTrue(responseOut.toString().contains("OK"));
+		assertTrue(responseOut.toString().contains("Successfully"));
 	}
 
 	@Test

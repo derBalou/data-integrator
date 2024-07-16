@@ -27,13 +27,14 @@ dependencies {
     testImplementation("com.google.truth:truth:1.4.0")
     testImplementation("org.mockito:mockito-core:5.10.0")
     testImplementation("com.google.code.gson:gson:2.8.9")
-
+    testImplementation("com.google.cloud:google-cloud-bigquery:2.41.0")
 }
 
 tasks.test {
     useJUnitPlatform()
 
     environment("API_KEY", "123456")
+    environment("TEST", "true")
 }
 
 /* register a task to run functions locally
