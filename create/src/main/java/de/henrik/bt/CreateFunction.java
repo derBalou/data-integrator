@@ -12,9 +12,12 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 
 public class CreateFunction implements HttpFunction {
+
+	private static final Logger logger = Logger.getLogger(CreateFunction.class.getName());
 
 	@Override
 	public void service(HttpRequest request, HttpResponse response) throws Exception {
@@ -29,6 +32,7 @@ public class CreateFunction implements HttpFunction {
 		if (!request.getHeaders().get("Authorization").get(0).equals("Bearer " + key)) {
 			response.setStatusCode(HttpURLConnection.HTTP_FORBIDDEN);
 			response.getWriter().write("Forbidden");
+			logger.warning("Unauthorized access API key: " + request.getHeaders().get("Authorization").get(0));
 			return;
 		}
 
@@ -51,8 +55,9 @@ public class CreateFunction implements HttpFunction {
 				AD_WorkDTA work = new GsonBuilder().create().fromJson(rawBody, AD_WorkDTA.class);
 				create(work, response);
 			} catch (JsonSyntaxException e) {
+				logger.warning("Invalid JSON: " + e.getMessage());
 				response.setStatusCode(HttpURLConnection.HTTP_BAD_REQUEST);
-				response.getWriter().write("Invalid JSON");
+				response.getWriter().write("Invalid JSON: " + e.getMessage());
 			}
 		} else if (request.getMethod().equals("OPTIONS")) {
 			response.appendHeader("Access-Control-Allow-Methods", "POST");
