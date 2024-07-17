@@ -52,7 +52,7 @@ public class CreateFunction implements HttpFunction {
 			String rawBody = request.getReader().lines().reduce("", (s1, s2) -> s1 + s2);
 			try {
 				// Parse JSON
-				AD_WorkDTA work = new GsonBuilder().create().fromJson(rawBody, AD_WorkDTA.class);
+				AD_WorkDTA work = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().fromJson(rawBody, AD_WorkDTA.class);
 				create(work, response);
 			} catch (JsonSyntaxException e) {
 				logger.warning("Invalid JSON: " + e.getMessage());
