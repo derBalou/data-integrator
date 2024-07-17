@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.henrik</groupId>
     <artifactId>bt</artifactId>
+    <version>b01</version>
 
     <properties>
         <maven.compiler.target>21</maven.compiler.target>
