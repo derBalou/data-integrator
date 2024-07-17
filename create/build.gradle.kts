@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("maven-publish")
 }
 
 group = "de.henrik.bt"
@@ -36,6 +37,8 @@ tasks.test {
     environment("API_KEY", "123456")
     environment("TEST", "true")
 }
+
+val javaVer = JavaVersion.VERSION_21
 
 /* register a task to run functions locally
 tasks.register<JavaExec>("runFunction") {
