@@ -116,12 +116,14 @@ public class CreateFunction implements HttpFunction {
 			if (bqResponse.hasErrors()) {
 				response.setStatusCode(HttpURLConnection.HTTP_INTERNAL_ERROR);
 				response.getWriter().write("Failed to insert row.");
+				logger.severe("Failed to insert row: " + bqResponse.getInsertErrors().toString());
 				return;
 			}
 		}
 		catch (BigQueryException ex) {
 			response.setStatusCode(HttpURLConnection.HTTP_INTERNAL_ERROR);
 			response.getWriter().write("Failed to insert row.");
+			logger.severe("Failed to insert row: " + ex.getMessage());
 			return;
 		}
 
