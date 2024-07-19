@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import java.net.HttpURLConnection;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -89,11 +90,29 @@ public class CreateFunction implements HttpFunction {
 			rowContent.put("work_parent_id", work.getWork_parent_id());
 			rowContent.put("plannedDuration", work.getPlannedDuration());
 			rowContent.put("actualDuration", work.getActualDuration());
-			rowContent.put("requestedStartDate", work.getRequestedStartDate());
-			rowContent.put("expectedStartDate", work.getExpectedStartDate());
-			rowContent.put("expectedCompletionDate", work.getExpectedCompletionDate());
-			rowContent.put("cancellationDate", work.getCancellationDate());
+			rowContent.put("requestedStartDate", getBetterTime(work.getRequestedStartDate()));
+			rowContent.put("expectedStartDate", getBetterTime(work.getExpectedStartDate()));
+			rowContent.put("expectedCompletionDate", getBetterTime(work.getExpectedCompletionDate()));
+			rowContent.put("cancellationDate", getBetterTime(work.getCancellationDate()));
 			rowContent.put("cancellationReason", work.getCancellationReason());
+
+			// Add the rest of the fields
+			rowContent.put("completionStartDate", getBetterTime(work.getCompletionStartDate()));
+			rowContent.put("completionEndDate", getBetterTime(work.getCompletionEndDate()));
+
+			rowContent.put("description", work.getDescription());
+			rowContent.put("bundleId", work.getBundleId());
+
+			rowContent.put("isActivated", work.isActivated());
+			rowContent.put("isSplittable", work.isSplittable());
+			rowContent.put("isAppointmentAgreed", work.isAppointmentAgreed());
+			rowContent.put("isBundle", work.isBundle());
+			rowContent.put("isWorkEnabled", work.isWorkEnabled());
+
+			rowContent.put("jeopardy", work.getJeopardy());
+			rowContent.put("isQualityGateEnabled", work.isQualityGateEnabled());
+			rowContent.put("name", work.getName());
+			rowContent.put("orderDate", getBetterTime(work.getOrderDate()));
 
 			rowContent.put("state", work.getState());
 			rowContent.put("workPriority", work.getWorkPriority());
@@ -133,5 +152,12 @@ public class CreateFunction implements HttpFunction {
 
 	private  boolean isTest() {
 		return System.getenv("TEST") != null && Objects.equals(System.getenv("TEST"), "true");
+	}
+
+	private Object getBetterTime(Timestamp t) {
+		if (t == null) {
+			return null;
+		}
+		return (int) Math.floor(t.getTime() /1000);
 	}
 }
