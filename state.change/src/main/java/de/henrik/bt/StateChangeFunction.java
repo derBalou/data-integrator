@@ -116,6 +116,8 @@ public class StateChangeFunction implements HttpFunction {
 				}
 			}
 
+			logger.info(query.toString());
+
 			QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query.toString()).build();
 			TableResult result = bq.query(queryConfig);
 
