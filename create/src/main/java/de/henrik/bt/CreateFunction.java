@@ -1,6 +1,7 @@
 package de.henrik.bt;
 
 import com.google.cloud.bigquery.*;
+import com.google.cloud.bigquery.storage.v1.TableName;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
@@ -81,6 +82,7 @@ public class CreateFunction implements HttpFunction {
 			}
 			BigQuery bq = BigQueryOptions.getDefaultInstance().getService();
 
+			String projectId = "bt-data-integrator";
 			String datasetName = "poc";
 			String tableName = "work";
 
@@ -125,19 +127,25 @@ public class CreateFunction implements HttpFunction {
 			rowContent.put("actualQuantity_units", work.getActualQuantity_units());
 			rowContent.put("workSpecification", work.getWorkSpecification());
 
-			InsertAllResponse bqResponse = bq.insertAll(
-					InsertAllRequest.newBuilder(TableId.of(datasetName, tableName))
-							.setRows(
-									ImmutableList.of(InsertAllRequest.RowToInsert.of(rowContent))
-							).build()
-			);
+			String query = "INSERT INTO `" + projectId + "." + datasetName + "." + tableName + "` ("
+					+ String.join(",", rowContent.keySet()) + ") VALUES ("
+					+ String.join(",", rowContent.values().stream().map(v -> {
+				if (v instanceof String) {
+					return "\"" + v + "\"";
+				} else if (v instanceof Timestamp) {
+					return "\"" + v + "\"";
+				} else {
+					return v.toString();
+				}
+			}).toArray(String[]::new)) + ")";
 
-			if (bqResponse.hasErrors()) {
-				response.setStatusCode(HttpURLConnection.HTTP_INTERNAL_ERROR);
-				response.getWriter().write("Failed to insert row.");
-				logger.severe("Failed to insert row: " + bqResponse.getInsertErrors().toString());
-				return;
-			}
+			QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query).build();
+			TableResult result = bq.query(queryConfig);
+
+			response.setStatusCode(HttpURLConnection.HTTP_OK);
+			response.getWriter().write("Successfully inserted row: " + result.toString());
+			return;
+
 		}
 		catch (BigQueryException ex) {
 			response.setStatusCode(HttpURLConnection.HTTP_INTERNAL_ERROR);
@@ -145,9 +153,6 @@ public class CreateFunction implements HttpFunction {
 			logger.severe("Failed to insert row: " + ex.getMessage());
 			return;
 		}
-
-		response.setStatusCode(HttpURLConnection.HTTP_OK);
-		response.getWriter().write("Successfully inserted row.");
 	}
 
 	private  boolean isTest() {
