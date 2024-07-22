@@ -4,55 +4,55 @@ import java.sql.Timestamp;
 
 public class AD_WorkDTA {
 
-	private String id;
-	private String work_parent_id;
+	public String id;
+	public String work_parent_id;
 
-	private String plannedDuration;
-	private String actualDuration;
+	public String plannedDuration;
+	public String actualDuration;
 
-	private Timestamp requestedStartDate;
-	private Timestamp expectedStartDate;
-	private Timestamp expectedCompletionDate;
+	public Timestamp requestedStartDate;
+	public Timestamp expectedStartDate;
+	public Timestamp expectedCompletionDate;
 
-	private Timestamp cancellationDate;
-	private String cancellationReason;
+	public Timestamp cancellationDate;
+	public String cancellationReason;
 
-	private Timestamp completionStartDate;
-	private Timestamp completionEndDate;
+	public Timestamp completionStartDate;
+	public Timestamp completionEndDate;
 
-	private String description;
+	public String description;
 
-	private String bundleId;
+	public String bundleId;
 
-	private boolean isActivated;
-	private boolean isSplittable;
-	private boolean isAppointmentAgreed;
-	private boolean isBundle;
-	private boolean isWorkEnabled;
+	public boolean isActivated;
+	public boolean isSplittable;
+	public boolean isAppointmentAgreed;
+	public boolean isBundle;
+	public boolean isWorkEnabled;
 
-	private String jeopardy;
+	public String jeopardy;
 
-	private boolean isQualityGateEnabled;
+	public boolean isQualityGateEnabled;
 
-	private String name;
+	public String name;
 
-	private Timestamp orderDate;
+	public Timestamp orderDate;
 
-	private String state;
+	public String state;
 
-	private short workPriority;
-	private String type;
+	public short workPriority;
+	public String type;
 
-	private String relevance;
-	private String schedulingType;
+	public String relevance;
+	public String schedulingType;
 
-	private double plannedQuantity_amount;
-	private String plannedQuantity_units;
+	public double plannedQuantity_amount;
+	public String plannedQuantity_units;
 
-	private double actualQuantity_amount;
-	private String actualQuantity_units;
+	public double actualQuantity_amount;
+	public String actualQuantity_units;
 
-	private String workSpecification;
+	public String workSpecification;
 
 	public AD_WorkDTA() {
 		super();
