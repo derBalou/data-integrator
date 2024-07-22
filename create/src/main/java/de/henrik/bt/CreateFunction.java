@@ -133,8 +133,8 @@ public class CreateFunction implements HttpFunction {
 				if (v instanceof String) {
 					return "\"" + v + "\"";
 				} else if (v instanceof Timestamp) {
-					return "TIMESTAMP(" + v.toString() + ")";
-				} else if (v == null){
+					return "\"" + v + "\"";
+				} else if (v == null) {
 					return "null";
 				} else {
 					return v.toString();
