@@ -4,6 +4,7 @@ import com.google.cloud.bigquery.*;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
@@ -95,7 +96,7 @@ public class StateChangeFunction implements HttpFunction {
 				return;
 			}
 
-			logger.info(newWork.toString());
+			logger.info(new Gson().toJson(newWork));
 
 			StringBuilder query = new StringBuilder();
 
