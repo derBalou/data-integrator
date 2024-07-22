@@ -7,10 +7,16 @@ import com.google.cloud.functions.HttpResponse;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
+import java.sql.Timestamp;
+import java.util.Objects;
+import java.util.logging.Logger;
 
 
 public class StateChangeFunction implements HttpFunction {
+
+	private static final Logger logger = Logger.getLogger(StateChangeFunction.class.getName());
 
 	@Override
 	public void service(HttpRequest request, HttpResponse response) throws Exception {
@@ -64,58 +70,69 @@ public class StateChangeFunction implements HttpFunction {
 	private void changeState(AD_WorkDTA newWork, HttpResponse response) throws Exception {
 
 		try {
+			if (isTest()) {
+				response.setStatusCode(HttpURLConnection.HTTP_OK);
+				response.getWriter().write("Successfully updated work.");
+				return;
+			}
+
 			BigQuery bq = BigQueryOptions.getDefaultInstance().getService();
 
 			String datasetName = "poc";
 			String tableName = "work";
 
-			String query =
-					"SELECT * FROM `poc.work` " +
-							"WHERE id = @id";
+			if (newWork.getState() == null) {
+				response.setStatusCode(HttpURLConnection.HTTP_BAD_REQUEST);
+				response.getWriter().write("State is missing");
+				logger.warning("State is missing");
+				return;
+			}
 
-			QueryJobConfiguration queryConfig =
-					QueryJobConfiguration.newBuilder(query)
-							.addNamedParameter("id", QueryParameterValue.string(newWork.getId()))
-							.build();
+			if (newWork.getId() == null) {
+				response.setStatusCode(HttpURLConnection.HTTP_BAD_REQUEST);
+				response.getWriter().write("ID is missing");
+				logger.warning("ID is missing");
+				return;
+			}
 
+			StringBuilder query = new StringBuilder();
+
+			Field[] fields = newWork.getClass().getDeclaredFields();
+			for (Field field : fields) {
+				if (field.get(newWork) != null && !field.getName().equals("id")){
+					if (field.getType() == Timestamp.class) {
+						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(getBetterTime((Timestamp) field.get(newWork))).append(" WHERE id = ").append(newWork.getId()).append("; \\n");
+					} else {
+						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = ").append(newWork.getId()).append("; \\n");
+					}
+				}
+			}
+
+			QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query.toString()).build();
 			TableResult result = bq.query(queryConfig);
 
-			if (result.getTotalRows() == 0) {
-				response.setStatusCode(HttpURLConnection.HTTP_NOT_FOUND);
-				response.getWriter().write("Row not found.");
-				return;
-			}
-
-			// load oldWork data from BigQuery
-
-			AD_WorkDTA oldWork = new AD_WorkDTA();
-
-			for (FieldValueList row : result.iterateAll()) {
-				oldWork.setId(row.get("id").getStringValue());
-				oldWork.setWork_parent_id(row.get("work_parent_id").getStringValue());
-				oldWork.setPlannedDuration(row.get("plannedDuration").getStringValue());
-				oldWork.setActualDuration(row.get("actualDuration").getStringValue());
-
-				// add more fields here
-
-			}
-
-
-
-
-			/*if (bqResponse.hasErrors()) {
-				response.setStatusCode(HttpURLConnection.HTTP_INTERNAL_ERROR);
-				response.getWriter().write("Failed to insert row.");
-				return;
-			}*/
 		}
-		catch (BigQueryException ex) {
+		catch (BigQueryException | JobException | InterruptedException ex) {
 			response.setStatusCode(HttpURLConnection.HTTP_INTERNAL_ERROR);
 			response.getWriter().write("Failed to insert row.");
+			logger.severe("Failed to insert row: " + ex.getMessage());
 			return;
 		}
 
+
 		response.setStatusCode(HttpURLConnection.HTTP_OK);
-		response.getWriter().write("Successfully inserted row.");
+		response.getWriter().write("Successfully updated work.");
 	}
+
+	private  boolean isTest() {
+		return System.getenv("TEST") != null && Objects.equals(System.getenv("TEST"), "true");
+	}
+
+	private Object getBetterTime(Timestamp t) {
+		if (t == null) {
+			return null;
+		}
+		return (int) Math.floor(t.getTime() /1000);
+	}
+
 }

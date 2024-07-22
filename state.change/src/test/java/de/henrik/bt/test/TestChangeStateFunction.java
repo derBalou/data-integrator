@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 
-class TestCreateFunction {
+class TestChangeStateFunction {
 
 	@Mock private HttpRequest request;
 	@Mock private HttpResponse response;
@@ -47,7 +47,7 @@ class TestCreateFunction {
 
 		//when(request.getHeaders()).thenReturn((Map<String, String>) Collections.singletonMap("Authorization", "Bearer"));
 
-		if (testInfo.getDisplayName().equals("CreateFunctionTest()")) {
+		if (testInfo.getDisplayName().equals("StateChangeFunctionTest()")) {
 			when(request.getMethod()).thenReturn("POST");
 		}
 
@@ -59,7 +59,7 @@ class TestCreateFunction {
 
 
 	@Test
-	public void CreateFunctionTest() throws Exception {
+	public void StateChangeFunctionTest() throws Exception {
 
 		AD_WorkDTA work = new AD_WorkDTA(true);
 		String json = new Gson().toJson(work);
@@ -70,11 +70,11 @@ class TestCreateFunction {
 
 		writerOut.flush();
 
-		assertTrue(responseOut.toString().contains("OK"));
+		assertTrue(responseOut.toString().contains("Successfully updated work."));
 	}
 
 	@Test
-	public void CreateFunctionWrongAPIKeyTest() throws Exception {
+	public void StateChangeFunctionWrongAPIKeyTest() throws Exception {
 		Map<String, List<String>> headers = Map.of("Authorization", List.of("Bearer ABCDEF"));
 		when(request.getHeaders()).thenReturn(headers);
 		new StateChangeFunction().service(request, response);
@@ -84,7 +84,7 @@ class TestCreateFunction {
 	}
 
 	@Test
-	public void CreateFunctionNoAPIKeyTest() throws Exception {
+	public void StateChangeFunctionNoAPIKeyTest() throws Exception {
 		when(request.getHeaders()).thenReturn(Collections.emptyMap());
 		new StateChangeFunction().service(request, response);
 
