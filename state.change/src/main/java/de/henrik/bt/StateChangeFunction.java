@@ -100,11 +100,7 @@ public class StateChangeFunction implements HttpFunction {
 			Field[] fields = newWork.getClass().getDeclaredFields();
 			for (Field field : fields) {
 				if (field.get(newWork) != null && !field.getName().equals("id")){
-					if (field.getType() == Timestamp.class) {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(getBetterTime((Timestamp) field.get(newWork))).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
-					} else {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
-					}
+					query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = \"").append(field.get(newWork)).append("\" WHERE id = \"").append(newWork.getId()).append("\"; \n");
 				}
 			}
 
@@ -114,8 +110,8 @@ public class StateChangeFunction implements HttpFunction {
 		}
 		catch (BigQueryException | JobException | InterruptedException ex) {
 			response.setStatusCode(HttpURLConnection.HTTP_INTERNAL_ERROR);
-			response.getWriter().write("Failed to insert row.");
-			logger.severe("Failed to insert row: " + ex.getMessage());
+			response.getWriter().write("Failed to update row.");
+			logger.severe("Failed to update row: " + ex.getMessage());
 			return;
 		}
 
