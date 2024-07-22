@@ -101,9 +101,9 @@ public class StateChangeFunction implements HttpFunction {
 			for (Field field : fields) {
 				if (field.get(newWork) != null && !field.getName().equals("id")){
 					if (field.getType() == Timestamp.class) {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(getBetterTime((Timestamp) field.get(newWork))).append(" WHERE id = ").append(newWork.getId()).append("; \\n");
+						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(getBetterTime((Timestamp) field.get(newWork))).append(" WHERE id = ").append(newWork.getId()).append("; \n");
 					} else {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = ").append(newWork.getId()).append("; \\n");
+						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = ").append(newWork.getId()).append("; \n");
 					}
 				}
 			}
