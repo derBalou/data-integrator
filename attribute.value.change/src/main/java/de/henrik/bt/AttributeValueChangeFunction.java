@@ -81,13 +81,6 @@ public class AttributeValueChangeFunction implements HttpFunction {
 			String datasetName = "poc";
 			String tableName = "work";
 
-			if (newWork.getState() == null) {
-				response.setStatusCode(HttpURLConnection.HTTP_BAD_REQUEST);
-				response.getWriter().write("State is missing");
-				logger.warning("State is missing");
-				return;
-			}
-
 			if (newWork.getId() == null) {
 				response.setStatusCode(HttpURLConnection.HTTP_BAD_REQUEST);
 				response.getWriter().write("ID is missing");
