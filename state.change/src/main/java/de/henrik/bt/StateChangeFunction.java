@@ -99,8 +99,17 @@ public class StateChangeFunction implements HttpFunction {
 
 			Field[] fields = newWork.getClass().getDeclaredFields();
 			for (Field field : fields) {
-				if (field.get(newWork) != null && !field.getName().equals("id")){
-					query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = \"").append(field.get(newWork)).append("\" WHERE id = \"").append(newWork.getId()).append("\"; \n");
+				if (field.get(newWork) != null && !field.getName().equals("id")) {
+					if (field.getType() == Boolean.class) {
+						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
+								.append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
+					} else if (field.getType() == Integer.class) {
+						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
+								.append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
+					} else {
+						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
+								.append(field.getName()).append(" = \"").append(field.get(newWork)).append("\" WHERE id = \"").append(newWork.getId()).append("\"; \n");
+					}
 				}
 			}
 
