@@ -51,7 +51,7 @@ public class AttributeValueChangeFunction implements HttpFunction {
 			try {
 				// Parse JSON
 				AD_WorkDTA work = new GsonBuilder().create().fromJson(rawBody, AD_WorkDTA.class);
-				changeState(work, response);
+				changeAttributeValue(work, response);
 			} catch (JsonSyntaxException e) {
 				response.setStatusCode(HttpURLConnection.HTTP_BAD_REQUEST);
 				response.getWriter().write("Invalid JSON");
@@ -67,7 +67,7 @@ public class AttributeValueChangeFunction implements HttpFunction {
 		}
 	}
 
-	private void changeState(AD_WorkDTA newWork, HttpResponse response) throws Exception {
+	private void changeAttributeValue(AD_WorkDTA newWork, HttpResponse response) throws Exception {
 
 		try {
 			if (isTest()) {
