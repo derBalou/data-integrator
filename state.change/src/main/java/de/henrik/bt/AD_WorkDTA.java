@@ -1,5 +1,7 @@
 package de.henrik.bt;
 
+import org.apache.arrow.flatbuf.Bool;
+
 import java.sql.Timestamp;
 
 public class AD_WorkDTA {
@@ -24,15 +26,15 @@ public class AD_WorkDTA {
 
 	public String bundleId;
 
-	public boolean isActivated;
-	public boolean isSplittable;
-	public boolean isAppointmentAgreed;
-	public boolean isBundle;
-	public boolean isWorkEnabled;
+	public Boolean isActivated;
+	public Boolean isSplittable;
+	public Boolean isAppointmentAgreed;
+	public Boolean isBundle;
+	public Boolean isWorkEnabled;
 
 	public String jeopardy;
 
-	public boolean isQualityGateEnabled;
+	public Boolean isQualityGateEnabled;
 
 	public String name;
 
@@ -40,16 +42,16 @@ public class AD_WorkDTA {
 
 	public String state;
 
-	public short workPriority;
+	public Short workPriority;
 	public String type;
 
 	public String relevance;
 	public String schedulingType;
 
-	public double plannedQuantity_amount;
+	public Double plannedQuantity_amount;
 	public String plannedQuantity_units;
 
-	public double actualQuantity_amount;
+	public Double actualQuantity_amount;
 	public String actualQuantity_units;
 
 	public String workSpecification;
@@ -102,10 +104,10 @@ public class AD_WorkDTA {
 			this.relevance = "123";
 			this.schedulingType = "123";
 
-			this.plannedQuantity_amount = 123;
+			this.plannedQuantity_amount = 123.0;
 			this.plannedQuantity_units = "123";
 
-			this.actualQuantity_amount = 123;
+			this.actualQuantity_amount = 123.0;
 			this.actualQuantity_units = "123";
 
 			this.workSpecification = "123";
