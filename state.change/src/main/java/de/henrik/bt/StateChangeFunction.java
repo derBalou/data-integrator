@@ -51,7 +51,7 @@ public class StateChangeFunction implements HttpFunction {
 			String rawBody = request.getReader().lines().reduce("", (s1, s2) -> s1 + s2);
 			try {
 				// Parse JSON
-				AD_WorkDTA work = new GsonBuilder().create().fromJson(rawBody, AD_WorkDTA.class);
+				AD_WorkDTA work = new GsonBuilder().serializeNulls().create().fromJson(rawBody, AD_WorkDTA.class);
 				changeState(work, response);
 			} catch (JsonSyntaxException e) {
 				response.setStatusCode(HttpURLConnection.HTTP_BAD_REQUEST);
