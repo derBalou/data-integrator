@@ -92,15 +92,15 @@ public class CreateFunction implements HttpFunction {
 			rowContent.put("work_parent_id", work.getWork_parent_id());
 			rowContent.put("plannedDuration", work.getPlannedDuration());
 			rowContent.put("actualDuration", work.getActualDuration());
-			rowContent.put("requestedStartDate", getBetterTime(work.getRequestedStartDate()));
-			rowContent.put("expectedStartDate", getBetterTime(work.getExpectedStartDate()));
-			rowContent.put("expectedCompletionDate", getBetterTime(work.getExpectedCompletionDate()));
-			rowContent.put("cancellationDate", getBetterTime(work.getCancellationDate()));
+			rowContent.put("requestedStartDate", work.getRequestedStartDate());
+			rowContent.put("expectedStartDate", work.getExpectedStartDate());
+			rowContent.put("expectedCompletionDate", work.getExpectedCompletionDate());
+			rowContent.put("cancellationDate", work.getCancellationDate());
 			rowContent.put("cancellationReason", work.getCancellationReason());
 
 			// Add the rest of the fields
-			rowContent.put("completionStartDate", getBetterTime(work.getCompletionStartDate()));
-			rowContent.put("completionEndDate", getBetterTime(work.getCompletionEndDate()));
+			rowContent.put("completionStartDate", work.getCompletionStartDate());
+			rowContent.put("completionEndDate", work.getCompletionEndDate());
 
 			rowContent.put("description", work.getDescription());
 			rowContent.put("bundleId", work.getBundleId());
@@ -114,7 +114,7 @@ public class CreateFunction implements HttpFunction {
 			rowContent.put("jeopardy", work.getJeopardy());
 			rowContent.put("isQualityGateEnabled", work.isQualityGateEnabled());
 			rowContent.put("name", work.getName());
-			rowContent.put("orderDate", getBetterTime(work.getOrderDate()));
+			rowContent.put("orderDate", work.getOrderDate());
 
 			rowContent.put("state", work.getState());
 			rowContent.put("workPriority", work.getWorkPriority());
@@ -133,7 +133,7 @@ public class CreateFunction implements HttpFunction {
 				if (v instanceof String) {
 					return "\"" + v + "\"";
 				} else if (v instanceof Timestamp) {
-					return "\"" + v + "\"";
+					return "TIMESTAMP(" + v.toString() + ")";
 				} else if (v == null){
 					return "null";
 				} else {
