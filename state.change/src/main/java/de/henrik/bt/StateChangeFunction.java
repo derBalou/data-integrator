@@ -95,6 +95,8 @@ public class StateChangeFunction implements HttpFunction {
 				return;
 			}
 
+			logger.info(newWork.toString());
+
 			StringBuilder query = new StringBuilder();
 
 			Field[] fields = newWork.getClass().getDeclaredFields();
