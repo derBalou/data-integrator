@@ -112,6 +112,9 @@ public class StateChangeFunction implements HttpFunction {
 					} else if (field.getType() == Short.class) {
 						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
 								.append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
+					} else if (field.getType() == Float.class) {
+						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
+								.append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
 					} else {
 						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
 								.append(field.getName()).append(" = \"").append(field.get(newWork)).append("\" WHERE id = \"").append(newWork.getId()).append("\"; \n");
