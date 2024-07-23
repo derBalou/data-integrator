@@ -48,10 +48,10 @@ public class AD_WorkDTA {
 	public String relevance;
 	public String schedulingType;
 
-	public Double plannedQuantity_amount;
+	public Float plannedQuantity_amount;
 	public String plannedQuantity_units;
 
-	public Double actualQuantity_amount;
+	public Float actualQuantity_amount;
 	public String actualQuantity_units;
 
 	public String workSpecification;
@@ -104,10 +104,10 @@ public class AD_WorkDTA {
 			this.relevance = "123";
 			this.schedulingType = "123";
 
-			this.plannedQuantity_amount = 123.0;
+			this.plannedQuantity_amount = 123.0f;
 			this.plannedQuantity_units = "123";
 
-			this.actualQuantity_amount = 123.0;
+			this.actualQuantity_amount = 123.0f;
 			this.actualQuantity_units = "123";
 
 			this.workSpecification = "123";
@@ -373,7 +373,7 @@ public class AD_WorkDTA {
 		return plannedQuantity_amount;
 	}
 
-	public void setPlannedQuantity_amount(double plannedQuantity_amount) {
+	public void setPlannedQuantity_amount(float plannedQuantity_amount) {
 		this.plannedQuantity_amount = plannedQuantity_amount;
 	}
 
@@ -389,7 +389,7 @@ public class AD_WorkDTA {
 		return actualQuantity_amount;
 	}
 
-	public void setActualQuantity_amount(double actualQuantity_amount) {
+	public void setActualQuantity_amount(float actualQuantity_amount) {
 		this.actualQuantity_amount = actualQuantity_amount;
 	}
 
