@@ -1,58 +1,60 @@
 package de.henrik.bt;
 
+import org.apache.arrow.flatbuf.Bool;
+
 import java.sql.Timestamp;
 
 public class AD_WorkDTA {
 
-	private String id;
-	private String work_parent_id;
+	public String id;
+	public String work_parent_id;
 
-	private String plannedDuration;
-	private String actualDuration;
+	public String plannedDuration;
+	public String actualDuration;
 
-	private Timestamp requestedStartDate;
-	private Timestamp expectedStartDate;
-	private Timestamp expectedCompletionDate;
+	public Timestamp requestedStartDate;
+	public Timestamp expectedStartDate;
+	public Timestamp expectedCompletionDate;
 
-	private Timestamp cancellationDate;
-	private String cancellationReason;
+	public Timestamp cancellationDate;
+	public String cancellationReason;
 
-	private Timestamp completionStartDate;
-	private Timestamp completionEndDate;
+	public Timestamp completionStartDate;
+	public Timestamp completionEndDate;
 
-	private String description;
+	public String description;
 
-	private String bundleId;
+	public String bundleId;
 
-	private boolean isActivated;
-	private boolean isSplittable;
-	private boolean isAppointmentAgreed;
-	private boolean isBundle;
-	private boolean isWorkEnabled;
+	public Boolean isActivated;
+	public Boolean isSplittable;
+	public Boolean isAppointmentAgreed;
+	public Boolean isBundle;
+	public Boolean isWorkEnabled;
 
-	private String jeopardy;
+	public String jeopardy;
 
-	private boolean isQualityGateEnabled;
+	public Boolean isQualityGateEnabled;
 
-	private String name;
+	public String name;
 
-	private Timestamp orderDate;
+	public Timestamp orderDate;
 
-	private String state;
+	public String state;
 
-	private short workPriority;
-	private String type;
+	public Short workPriority;
+	public String type;
 
-	private String relevance;
-	private String schedulingType;
+	public String relevance;
+	public String schedulingType;
 
-	private double plannedQuantity_amount;
-	private String plannedQuantity_units;
+	public Float plannedQuantity_amount;
+	public String plannedQuantity_units;
 
-	private double actualQuantity_amount;
-	private String actualQuantity_units;
+	public Float actualQuantity_amount;
+	public String actualQuantity_units;
 
-	private String workSpecification;
+	public String workSpecification;
 
 	public AD_WorkDTA() {
 		super();
@@ -102,10 +104,10 @@ public class AD_WorkDTA {
 			this.relevance = "123";
 			this.schedulingType = "123";
 
-			this.plannedQuantity_amount = 123;
+			this.plannedQuantity_amount = 123.0f;
 			this.plannedQuantity_units = "123";
 
-			this.actualQuantity_amount = 123;
+			this.actualQuantity_amount = 123.0f;
 			this.actualQuantity_units = "123";
 
 			this.workSpecification = "123";
@@ -371,7 +373,7 @@ public class AD_WorkDTA {
 		return plannedQuantity_amount;
 	}
 
-	public void setPlannedQuantity_amount(double plannedQuantity_amount) {
+	public void setPlannedQuantity_amount(float plannedQuantity_amount) {
 		this.plannedQuantity_amount = plannedQuantity_amount;
 	}
 
@@ -387,7 +389,7 @@ public class AD_WorkDTA {
 		return actualQuantity_amount;
 	}
 
-	public void setActualQuantity_amount(double actualQuantity_amount) {
+	public void setActualQuantity_amount(float actualQuantity_amount) {
 		this.actualQuantity_amount = actualQuantity_amount;
 	}
 

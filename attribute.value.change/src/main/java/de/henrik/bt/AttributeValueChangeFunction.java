@@ -89,17 +89,22 @@ public class AttributeValueChangeFunction implements HttpFunction {
 			}
 
 			StringBuilder query = new StringBuilder();
+			query.append("UPDATE `bt-data-integrator.poc.work` SET id = \"").append(newWork.getId()).append("\"");
 
 			Field[] fields = newWork.getClass().getDeclaredFields();
 			for (Field field : fields) {
 				if (field.get(newWork) != null && !field.getName().equals("id")){
-					if (field.getType() == Timestamp.class) {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(getBetterTime((Timestamp) field.get(newWork))).append(" WHERE id = ").append(newWork.getId()).append("; \\n");
+					if (field.getType() == String.class) {
+						query.append(", ").append(field.getName()).append(" = \"").append(field.get(newWork)).append("\"");
+					} else if (field.getType() == Timestamp.class) {
+						query.append(", ").append(field.getName()).append(" = \"").append(field.get(newWork)).append("\"");
 					} else {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ").append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = ").append(newWork.getId()).append("; \\n");
+						query.append(", ").append(field.getName()).append(" = ").append(field.get(newWork));
 					}
 				}
 			}
+
+			query.append(" WHERE id = \"").append(newWork.getId()).append("\";");
 
 			QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query.toString()).build();
 			TableResult result = bq.query(queryConfig);
