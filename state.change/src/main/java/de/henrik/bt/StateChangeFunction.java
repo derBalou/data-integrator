@@ -99,28 +99,22 @@ public class StateChangeFunction implements HttpFunction {
 			logger.info(new Gson().toJson(newWork));
 
 			StringBuilder query = new StringBuilder();
+			query.append("UPDATE `bt-data-integrator.poc.work` SET state = \"").append(newWork.getState()).append("\"");
 
 			Field[] fields = newWork.getClass().getDeclaredFields();
 			for (Field field : fields) {
-				if (field.get(newWork) != null && !field.getName().equals("id")) {
-					if (field.getType() == Boolean.class) {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
-								.append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
-					} else if (field.getType() == Integer.class) {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
-								.append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
-					} else if (field.getType() == Short.class) {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
-								.append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
-					} else if (field.getType() == Float.class) {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
-								.append(field.getName()).append(" = ").append(field.get(newWork)).append(" WHERE id = \"").append(newWork.getId()).append("\"; \n");
+				if (field.get(newWork) != null && !field.getName().equals("id") && !field.getName().equals("state")){
+					if (field.getType() == String.class) {
+						query.append(", ").append(field.getName()).append(" = \"").append(field.get(newWork)).append("\"");
+					} else if (field.getType() == Timestamp.class) {
+						query.append(", ").append(field.getName()).append(" = \"").append(field.get(newWork)).append("\"");
 					} else {
-						query.append("UPDATE `bt-data-integrator.").append(datasetName).append(".").append(tableName).append("` SET ")
-								.append(field.getName()).append(" = \"").append(field.get(newWork)).append("\" WHERE id = \"").append(newWork.getId()).append("\"; \n");
+						query.append(", ").append(field.getName()).append(" = ").append(field.get(newWork));
 					}
 				}
 			}
+
+			query.append(" WHERE id = \"").append(newWork.getId()).append("\";");
 
 			logger.info(query.toString());
 
